@@ -6,7 +6,7 @@
 
 /**
  *  W pliku {user.home}/iter.txt podane są trzy liczby całkowite: start end limit(rozdzielone spacjami)
-Napisać program wczytujący te trzy liczby i sumujący  liczby całkowite od start do end, ale przerywającą sumowanie gdy wartość sumy osiągnie lub przekroczy zadane ograniczenie limit. 
+Napisać program wczytujący te trzy liczby i sumujący  liczby całkowite od start do end, ale przerywającą sumowanie gdy wartość sumy osiągnie lub przekroczy zadane ograniczenie limit.
 Program ma wypisać na konsoli jedną liczbę: wynik sumowania.
 
 Dla przykładu, jeśli w pliku  podano:
@@ -25,11 +25,47 @@ Nazwa pliku, jego umiejscowienie i postać oraz postać wyniku na konsoli jest o
 
 package zad1;
 
-
 public class Main {
 
-  public static void main(String[] args) {
-    String fname = System.getProperty("user.home") + "/iter.txt";            
+	public static void main(String[] args) {
+		String fname = System.getProperty("user.home") + "/iter.txt";
 
-  }
+		BufferedReader br = null;
+		int result = 0;
+
+		try {
+			br = new BufferedReader(new FileReader(fname));
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] nums = line.split(" ");
+
+				if (nums.length != 3)
+					throw new Exception();
+
+				int start = Integer.parseInt(nums[0]);
+				int end = Integer.parseInt(nums[1]);
+				int limit = Integer.parseInt(nums[2]);
+
+				for (int i = start; i <= end; i++) {
+					if (result >= limit) {
+						System.out.println(limit);
+						return;
+					}
+					result += i;
+				}
+			}
+
+			System.out.println(result);
+		} catch (Exception e) {
+			System.out.println("***");
+
+		} finally {
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					System.out.println("***");
+				}
+		}
+	}
 }
